@@ -1,13 +1,11 @@
 package com.example.dummyapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class HelloActivity extends AppCompatActivity {
 
