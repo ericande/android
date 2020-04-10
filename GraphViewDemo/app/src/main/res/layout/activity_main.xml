@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/btn_submit2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:onClick="onClear"
+        android:text="Clear"
+        app:layout_constraintEnd_toStartOf="@+id/btn_submit"
+        app:layout_constraintTop_toBottomOf="@+id/text_Y" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="400dip"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/text_X"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:ems="6"
+        android:hint='"X Coordinate"'
+        android:inputType="numberDecimal"
+        android:selectAllOnFocus="true"
+        android:textAlignment="viewEnd"
+        app:layout_constraintStart_toStartOf="@+id/graph"
+        app:layout_constraintTop_toBottomOf="@+id/graph" />
+
+    <EditText
+        android:id="@+id/text_Y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:ems="6"
+        android:hint='"Y Coordinate"'
+        android:inputType="numberDecimal"
+        android:selectAllOnFocus="true"
+        android:textAlignment="viewEnd"
+        app:layout_constraintStart_toEndOf="@+id/text_X"
+        app:layout_constraintTop_toBottomOf="@+id/graph" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:onClick="onClick"
+        android:text="Submit"
+        app:layout_constraintEnd_toEndOf="@+id/text_Y"
+        app:layout_constraintTop_toBottomOf="@+id/text_Y" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
