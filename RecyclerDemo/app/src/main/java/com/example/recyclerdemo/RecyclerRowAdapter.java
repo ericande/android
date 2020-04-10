@@ -19,19 +19,19 @@ public class RecyclerRowAdapter extends RecyclerView.Adapter<RecyclerRowAdapter.
     private LayoutInflater theLayoutinflater;
     private ItemClickListener theItemClickListener;
 
+    RecyclerRowAdapter(Context aContext, List<String> aData) {
+        theLayoutinflater = LayoutInflater.from(aContext);
+        theRowData = newArrayList();
+        for (String myItem : aData) {
+            theRowData.add(new RowData(myItem));
+        }
+    }
+
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup aParent, int aViewType) {
         View myView = theLayoutinflater.inflate(R.layout.recycler_row, aParent, false);
         return new ViewHolder(myView);
-    }
-
-    RecyclerRowAdapter(Context aContext, List<String> aData) {
-            theLayoutinflater = LayoutInflater.from(aContext);
-            theRowData = newArrayList();
-            for (String myItem : aData) {
-                theRowData.add(new RowData(myItem));
-            }
     }
 
     @Override
