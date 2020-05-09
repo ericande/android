@@ -6,15 +6,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class MainActivity extends AppCompatActivity implements ItemClickListener {
+public class MainActivity extends AppCompatActivity {
 
-    private RecyclerRowAdapter theRecyclerRowAdapter;
+    private DynamicRecyclerRowAdapter theRecyclerRowAdapter;
 
     @Override
     protected void onCreate(Bundle aSavedInstanceState) {
@@ -22,20 +23,23 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         setContentView(R.layout.activity_main);
 
         ArrayList<String> myListData = newArrayList(getResources().getStringArray(R.array.trees));
-
         RecyclerView myRecyclerView = findViewById(R.id.recycleList);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        theRecyclerRowAdapter = new RecyclerRowAdapter(this, myListData);
-        theRecyclerRowAdapter.setClickListener(this);
+        theRecyclerRowAdapter = new DynamicRecyclerRowAdapter(this, myListData);
+        theRecyclerRowAdapter.setListener(this::registerClick);
         myRecyclerView.setAdapter(theRecyclerRowAdapter);
     }
 
-    @Override
-    public void onItemClick(View aView, int aPosition) {
-        String myToastText = theRecyclerRowAdapter.getItem(aPosition)
-                + " trees planted: "
-                + theRecyclerRowAdapter.getItemClickCount(aPosition);
-        Toast.makeText(this, myToastText, Toast.LENGTH_SHORT).show();
+    public void addItem(View aView) {
+        EditText addText = findViewById(R.id.addText);
+        theRecyclerRowAdapter.addItem(addText.getText().toString());
+    }
+
+    public void registerClick(View aView, int aPosition) {
+        Toast.makeText(this, "Performed a click on row "
+                + aPosition
+                + " in the view "
+                + aView.getClass(), Toast.LENGTH_SHORT).show();
     }
 }
 
