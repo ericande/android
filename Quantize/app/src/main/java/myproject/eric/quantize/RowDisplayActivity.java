@@ -3,9 +3,12 @@ package myproject.eric.quantize;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -39,6 +42,7 @@ public class RowDisplayActivity extends AppCompatActivity {
         theBinding = ActivityRowDisplayBinding.inflate(getLayoutInflater());
         setContentView(theBinding.getRoot());
         theButtons = new Button[] {theBinding.add1, theBinding.add2, theBinding.add3, theBinding.add4, theBinding.add5};
+        theBinding.addCustom.setOnEditorActionListener(customAddListener());
 
         theRecyclerAdapter = new DynamicRecyclerViewAdapter<>(this, makeListener(), false);
         theBinding.entryRv.setLayoutManager(new LinearLayoutManager(this));
@@ -82,6 +86,19 @@ public class RowDisplayActivity extends AppCompatActivity {
     public void add(View aView) {
         String myEntryVal = ((Button) aView).getText().toString();
         addEntry(myEntryVal);
+    }
+
+    public TextView.OnEditorActionListener customAddListener() {
+        return (v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (v == theBinding.addCustom) {
+                    addEntry(v.getText().toString());
+                    v.setText("");
+                    v.clearFocus();
+                }
+            }
+            return false; //Do not consume action, allowing soft keyboard to close
+        };
     }
 
     public void addCustom(View aView) {

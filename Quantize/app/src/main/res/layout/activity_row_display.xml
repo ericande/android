@@ -38,13 +38,15 @@
         app:layout_constraintTop_toBottomOf="@+id/header"
         app:layout_constraintVertical_weight="2" />
 
-    <Button
+    <EditText
         android:id="@+id/addCustom"
         android:layout_width="84dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:onClick="addCustom"
-        android:text="Custom"
+        android:hint="Custom"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:singleLine="true"
         app:layout_constraintStart_toEndOf="@+id/add5"
         app:layout_constraintTop_toTopOf="@+id/add5" />
 
