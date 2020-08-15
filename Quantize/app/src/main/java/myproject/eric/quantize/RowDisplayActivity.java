@@ -2,22 +2,21 @@ package myproject.eric.quantize;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.quantitativeself.R;
 import com.example.quantitativeself.databinding.ActivityRowDisplayBinding;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -45,7 +44,10 @@ public class RowDisplayActivity extends AppCompatActivity {
         theBinding.addCustom.setOnEditorActionListener(customAddListener());
 
         theRecyclerAdapter = new DynamicRecyclerViewAdapter<>(this, makeListener(), false);
-        theBinding.entryRv.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager myLayout = new LinearLayoutManager(this);
+        myLayout.setReverseLayout(true);
+        myLayout.setStackFromEnd(true);
+        theBinding.entryRv.setLayoutManager(myLayout);
         theBinding.entryRv.setAdapter(theRecyclerAdapter);
 
         Intent myIntent = getIntent();
@@ -101,35 +103,18 @@ public class RowDisplayActivity extends AppCompatActivity {
         };
     }
 
-    public void addCustom(View aView) {
-        EditText myEditText = new EditText(this);
-        myEditText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        new AlertDialog.Builder(this)
-                .setPositiveButton("ADD", (v, i) -> {
-                    String myAddText = myEditText.getText().toString();
-                    if (myAddText.matches(MainActivity.MATCH_WHITESPACE)) {
-                        Toast.makeText(this, "Blank entry not added", Toast.LENGTH_SHORT).show();
-                    } else {
-                        addEntry(myAddText);
-                    }
-                })
-                .setNegativeButton("CANCEL", (v, i) -> {
-                })
-                .setView(myEditText)
-                .create()
-                .show();
-    }
-
     private void addEntry(String aS) {
         Entry myEntry = new Entry();
         myEntry.data = aS;
         myEntry.rowId = theRowId;
+        myEntry.dateCreated = currentDateTime();
         theEntries.add(myEntry);
         theRecyclerAdapter.notifyItemInserted(theEntries.size()-1);
         AppDatabase.write(() -> theDatabase.getEntryDao().insert(myEntry));
         Toast.makeText(this, "Added new entry: " + aS, Toast.LENGTH_SHORT).show();
         addSuggestion(myEntry);
         populateAddButtons();
+        theBinding.entryRv.scrollToPosition(theRecyclerAdapter.getItemCount() - 1);
     }
 
     private RowClickListener makeListener() {
@@ -142,5 +127,9 @@ public class RowDisplayActivity extends AppCompatActivity {
                 AppDatabase.write(() -> theDatabase.getEntryDao().delete(myEntry));
             }
         };
+    }
+
+    private static LocalDateTime currentDateTime() {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
     }
 }

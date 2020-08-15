@@ -12,7 +12,7 @@ public interface EntryDao {
     @Query("SELECT * FROM entry")
     List<Entry> getAll();
 
-    @Query("SELECT * FROM entry WHERE row_id LIKE :aRowId")
+    @Query("SELECT * FROM entry WHERE row_id LIKE :aRowId ORDER BY date_created")
     List<Entry> getAllForRow(int aRowId);
 
     @Insert

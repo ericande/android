@@ -6,6 +6,9 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import myproject.eric.quantize.Displayable;
 
 @Entity(tableName = "entry",
@@ -24,8 +27,11 @@ public class Entry implements Displayable {
     @ColumnInfo(name = "data")
     public String data;
 
+    @ColumnInfo(name = "date_created")
+    public LocalDateTime dateCreated;
+
     @Override
     public String displayName() {
-        return data;
+        return data + " - " + dateCreated.format(DateTimeFormatter.ofPattern("EE, MMM dd - hh:mm a"));
     }
 }

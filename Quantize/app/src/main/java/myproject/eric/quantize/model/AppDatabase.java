@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.quantitativeself.R;
@@ -13,7 +14,8 @@ import com.example.quantitativeself.R;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Entry.class, Row.class}, version = 3)
+@Database(entities = {Entry.class, Row.class}, version = 4)
+@TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract EntryDao getEntryDao();
     public abstract RowDao getRowDao();

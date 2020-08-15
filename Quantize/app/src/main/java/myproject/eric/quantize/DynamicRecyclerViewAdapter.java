@@ -31,8 +31,8 @@ public class DynamicRecyclerViewAdapter<D extends Displayable> extends RecyclerV
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup aParent, int aViewType) {
         DynamicRecyclerRowBinding myBinding = DynamicRecyclerRowBinding.inflate(theLayoutInflater, aParent, false);
         if (!theMoveButtonsEnabled) {
-            myBinding.downButton.setVisibility(View.INVISIBLE);
-            myBinding.upButton.setVisibility(View.INVISIBLE);
+            myBinding.getRoot().removeView(myBinding.downButton);
+            myBinding.getRoot().removeView(myBinding.upButton);
         }
         return new ViewHolder(myBinding);
     }
