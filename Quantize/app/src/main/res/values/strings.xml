@@ -1,14 +1,9 @@
 <resources>
-    <string name="app_name">Recycler Demo</string>
+    <string name="app_name">Quantize!</string>
     <string-array name="trees">
-        <item>Aspen</item>
-        <item>Birch</item>
-        <item>Cedar</item>
-        <item>Dogwood</item>
-        <item>Elm</item>
-        <item>Fir</item>
-        <item>Grapefruit</item>
-        <item>Hawthorn</item>
+        <item>Cardio</item>
+        <item>Meditation</item>
+        <item>Practice</item>
     </string-array>
     <string-array name="default_entries">
         <item>10</item>

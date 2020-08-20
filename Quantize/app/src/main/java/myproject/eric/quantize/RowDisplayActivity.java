@@ -104,17 +104,31 @@ public class RowDisplayActivity extends AppCompatActivity {
     }
 
     private void addEntry(String aS) {
-        Entry myEntry = new Entry();
-        myEntry.data = aS;
-        myEntry.rowId = theRowId;
-        myEntry.dateCreated = currentDateTime();
-        theEntries.add(myEntry);
-        theRecyclerAdapter.notifyItemInserted(theEntries.size()-1);
-        AppDatabase.write(() -> theDatabase.getEntryDao().insert(myEntry));
-        Toast.makeText(this, "Added new entry: " + aS, Toast.LENGTH_SHORT).show();
-        addSuggestion(myEntry);
-        populateAddButtons();
-        theBinding.entryRv.scrollToPosition(theRecyclerAdapter.getItemCount() - 1);
+        if (!validEntry(aS)) {
+            Toast.makeText(this, "Invalid entry not added", Toast.LENGTH_SHORT).show();
+        } else {
+            Entry myEntry = new Entry();
+            myEntry.data = aS;
+            myEntry.rowId = theRowId;
+            myEntry.dateCreated = currentDateTime();
+            theEntries.add(myEntry);
+            theRecyclerAdapter.notifyItemInserted(theEntries.size() - 1);
+            AppDatabase.write(() -> theDatabase.getEntryDao().insert(myEntry));
+            Toast.makeText(this, "Added new entry: " + aS, Toast.LENGTH_SHORT).show();
+            addSuggestion(myEntry);
+            populateAddButtons();
+            theBinding.entryRv.scrollToPosition(theRecyclerAdapter.getItemCount() - 1);
+        }
+    }
+
+    //Parseability as a double is a reasonable proxy for being a valid entry value
+    private boolean validEntry(String aS) {
+        try {
+            Double.parseDouble(aS);
+            return true;
+        } catch (NumberFormatException aE) {
+            return false;
+        }
     }
 
     private RowClickListener makeListener() {

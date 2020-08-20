@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,9 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.quantitativeself.databinding.ActivityMainBinding;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import myproject.eric.quantize.model.Row;
 
@@ -50,32 +51,40 @@ public class MainActivity extends AppCompatActivity {
         myEditText.setInputType(InputType.TYPE_CLASS_TEXT);
         String myBtnText = aUpdate != null ? "UPDATE" : "ADD";
         String myTitleText = aUpdate != null ? "Edit item:" : "Add item:";
-        new AlertDialog.Builder(this)
+        DialogInterface.OnClickListener myDoneListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface aDialog, int aWhich) {
+                String myAddString = myEditText.getText().toString();
+                if (myAddString.matches(MATCH_WHITESPACE)) {
+                    Toast.makeText(MainActivity.this, "Invalid word not added!", Toast.LENGTH_SHORT).show();
+                } else {
+                    String msg;
+                    if (aUpdate == null) {
+                        msg = "Added new row called " + myAddString;
+                        theViewModel.add(new Row(myAddString, addPos()));
+                    } else {
+                        msg = "Renamed row from " + aUpdate.name + " to " + myAddString;
+                        theViewModel.update(aUpdate);
+                        aUpdate.name = myAddString;
+                    }
+                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        AlertDialog myDialog = new AlertDialog.Builder(this)
                 .setTitle(myTitleText)
                 .setView(myEditText)
-                .setPositiveButton(myBtnText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String myAddString = myEditText.getText().toString();
-                        if (myAddString.matches(MATCH_WHITESPACE)) {
-                            Toast.makeText(MainActivity.this, "Invalid word not added!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String msg;
-                            if (aUpdate == null) {
-                                msg = "Added new row called " + myAddString;
-                                theViewModel.add(new Row(myAddString, addPos()));
-                            } else {
-                                msg = "Renamed row from " + aUpdate.name + " to " + myAddString;
-                                theViewModel.update(aUpdate);
-                                aUpdate.name = myAddString;
-                            }
-                            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .setNegativeButton("CANCEL", (x, y) -> {})
-                .create()
-                .show();
+                .setPositiveButton(myBtnText, myDoneListener)
+                .setNegativeButton("CANCEL", (x, y) -> {
+                }).create();
+        myEditText.setOnEditorActionListener((aView, aAction, aEvent) -> {
+            if (aAction == EditorInfo.IME_ACTION_DONE) {
+                myDoneListener.onClick(null, 0);
+                myDialog.dismiss();
+            }
+            return false;
+        });
+        myDialog.show();
     }
 
     private int addPos() {
